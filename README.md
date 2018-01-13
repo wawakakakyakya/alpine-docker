@@ -6,7 +6,7 @@ docker images created alpine.
 pip install docker-compose
 ```
 
-# run
+# exec on alpine-docker dir
 ```
 docker-compose up -d samba
 ```

@@ -1,0 +1,33 @@
+version: '3'
+services:
+  base:
+    build: ./alpine-base-image
+    image: alp-edge
+    # volumes_from:
+    #   - data-gitbucket
+    # environment:
+      # DB_USER: redmine
+  samba:
+    # build: ./alpine-samba
+    image: samba
+    container_name: samba
+    ports:
+      - "445:445"
+    volumes:
+      - ./alpine-samba/smb.conf:/etc/samba/smb.conf
+      - /mnt/nas:/mnt/nas
+      - /var/log/samba:/var/log/samba
+    # command: "/sbin/init"
+  infra:
+    build: ./alpine-infra
+    image: infra
+    container_name: infra
+    ports:
+      - "67:67"
+      - "123:123"
+      - "323:323"
+    volumes:
+      - ./alpine-infra/chrony.conf:/etc/chrony/chrony.conf
+      - ./alpine-infra/dhcpd.conf:/etc/dhcpd.conf
+      - /var/log/chrony:/var/log/chrony
+    # command: "/sbin/init"

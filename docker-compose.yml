@@ -8,7 +8,7 @@ services:
     # environment:
       # DB_USER: redmine
   samba:
-    # build: ./alpine-samba
+    build: ./alpine-samba
     image: samba
     container_name: samba
     ports:
@@ -22,12 +22,15 @@ services:
     build: ./alpine-infra
     image: infra
     container_name: infra
+    network_mode: "host"
     ports:
-      - "67:67"
+      - "67:67/udp"
+      - "67:67/tcp"
       - "123:123"
       - "323:323"
     volumes:
       - ./alpine-infra/chrony.conf:/etc/chrony/chrony.conf
-      - ./alpine-infra/dhcpd.conf:/etc/dhcpd.conf
+      - ./alpine-infra/dhcpd.conf:/etc/dhcp/dhcpd.conf
       - /var/log/chrony:/var/log/chrony
+    privileged: true
     # command: "/sbin/init"

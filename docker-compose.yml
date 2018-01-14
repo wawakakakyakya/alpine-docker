@@ -11,6 +11,7 @@ services:
     build: ./alpine-samba
     image: samba
     container_name: samba
+    restart: always
     ports:
       - "445:445"
     volumes:
@@ -18,19 +19,57 @@ services:
       - /mnt/nas:/mnt/nas
       - /var/log/samba:/var/log/samba
     # command: "/sbin/init"
-  infra:
-    build: ./alpine-infra
-    image: infra
-    container_name: infra
+  syslog:
+    build: ./alpine-syslog
+    image: syslog
+    container_name: syslog
+    restart: always
+    ports:
+      - "514:514/udp"
+    volumes:
+      - /var/log/:/var/log/
+      - ./alpine-syslog/rsyslog.conf:/etc/rsyslog.conf
+  dhcp:
+    build: ./alpine-dhcp
+    image: dhcp
+    container_name: dhcp
+    restart: always
     network_mode: "host"
     ports:
       - "67:67/udp"
-      - "67:67/tcp"
+    volumes:
+      - ./alpine-dhcp/dhcpd.conf:/etc/dhcp/dhcpd.conf
+  ntp:
+    build: ./alpine-ntp
+    image: ntp
+    container_name: ntp
+    network_mode: "host"
+    restart: always
+    ports:
       - "123:123"
       - "323:323"
     volumes:
       - ./alpine-infra/chrony.conf:/etc/chrony/chrony.conf
-      - ./alpine-infra/dhcpd.conf:/etc/dhcp/dhcpd.conf
       - /var/log/chrony:/var/log/chrony
     privileged: true
     # command: "/sbin/init"
+  mysql:
+  # docker run --name some-app --link some-mysql:mysql -d application-that-uses-mysql
+    image: mysql
+    container_name: mysql
+    ports:
+      - "3306:3306"
+    environment:
+      MYSQL_DATABASE: order
+      MYSQL_ROOT_PASSWORD: password
+    volumes:
+      - "/var/lib/mysql:/var/lib/mysql"
+      - "/var/log/mysqld.log:/var/log/mysqld.log"
+      - "/var/run/mysqld/mysqld-slow.log:/var/run/mysqld/mysqld-slow.log"
+  owncloud:
+    image: owncloud/alpine
+    container_name: owncloud
+    links:
+      - mysql
+    depends_on:
+      - mysql

@@ -2,10 +2,10 @@ FROM alp-edge:latest
 
 # install package
 RUN apk update \
-    && apk --no-cache add chrony \
-    && rc-update add chronyd \
+    && apk --no-cache add rsyslog \
+    && rc-update add rsyslogd \
     && rm -rf /var/cache/apk/*
 
-EXPOSE 123/udp 323/udp
+EXPOSE 514/udp
 
 CMD ["/sbin/init"]

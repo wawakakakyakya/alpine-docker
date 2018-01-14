@@ -1,0 +1,62 @@
+# For advice on how to change settings please see
+# http://dev.mysql.com/doc/refman/5.6/en/server-configuration-defaults.html
+
+
+[mysqld]
+#
+# Remove leading # and set to the amount of RAM for the most important data
+# cache in MySQL. Start at 70% of total RAM for dedicated server, else 10%.
+# innodb_buffer_pool_size = 128M
+#
+# Remove leading # to turn on a very important data integrity option: logging
+# changes to the binary log between backups.
+# log_bin
+#
+# Remove leading # to set options mainly useful for reporting servers.
+# The server defaults are faster for transactions and fast SELECTs.
+# Adjust sizes as needed, experiment to find the optimal values.
+# join_buffer_size = 128M
+# sort_buffer_size = 2M
+# read_rnd_buffer_size = 2M
+datadir=/var/lib/mysql
+socket=/var/lib/mysql/mysql.sock
+
+# Disabling symbolic-links is recommended to prevent assorted security risks
+symbolic-links=0
+
+# Recommended in standard MySQL setup
+sql_mode=NO_ENGINE_SUBSTITUTION,STRICT_TRANS_TABLES 
+
+# スロークエリの出力設定
+slow_query_log=ON
+
+# スロークエリと判定する秒数
+long_query_time=3
+
+# スロークエリログの場所
+log-slow-queries=/var/log/slow.log
+
+# スレッドキャッシュ保持最大数
+thread_cache_size=100
+
+# クエリキャッシュ最大サイズ
+query_cache_limit=16M
+
+# クエリキャッシュで使用するメモリサイズ
+query_cache_size=512M
+
+# クエリキャッシュのタイプ(0:off, 1:ON SELECT SQL_NO_CACHE以外, 2:DEMAND SELECT SQL_CACHEのみ)
+query_cache_type=1
+
+# データ領域を「テーブル単位
+innodb_file_per_table=ON
+
+# InnoDBのデータとインデックスをキャッシュするバッファのサイズ(推奨は物理メモリの8割)
+innodb_buffer_pool_size=1G
+
+# InnoDBの更新ログを記録するディスク上のファイルサイズ(innodb_buffer_pool_sizeの4分の1程度)
+innodb_log_file_size=250M
+
+[mysqld_safe]
+log-error=/var/log/mysqld.log
+pid-file=/var/run/mysqld/mysqld.pid

@@ -1,26 +1,26 @@
 version: '3'
 services:
   base:
-    build: ./alpine-base-image
+    build: ./base
     image: alp-edge
     # volumes_from:
     #   - data-gitbucket
     # environment:
       # DB_USER: redmine
   samba:
-    build: ./alpine-samba
+    build: ./samba
     image: samba
     container_name: samba
     restart: always
     ports:
       - "445:445"
     volumes:
-      - ./alpine-samba/smb.conf:/etc/samba/smb.conf
+      - ./samba/smb.conf:/etc/samba/smb.conf
       - /mnt/nas:/mnt/nas
       - /var/log/samba:/var/log/samba
     # command: "/sbin/init"
   syslog:
-    build: ./alpine-syslog
+    build: ./syslog
     image: syslog
     container_name: syslog
     restart: always
@@ -28,9 +28,9 @@ services:
       - "514:514/udp"
     volumes:
       - /var/log/:/var/log/
-      - ./alpine-syslog/rsyslog.conf:/etc/rsyslog.conf
+      - ./syslog/rsyslog.conf:/etc/rsyslog.conf
   dhcp:
-    build: ./alpine-dhcp
+    build: ./dhcp
     image: dhcp
     container_name: dhcp
     restart: always
@@ -38,9 +38,9 @@ services:
     ports:
       - "67:67/udp"
     volumes:
-      - ./alpine-dhcp/dhcpd.conf:/etc/dhcp/dhcpd.conf
+      - ./dhcp/dhcpd.conf:/etc/dhcp/dhcpd.conf
   ntp:
-    build: ./alpine-ntp
+    build: ./ntp
     image: ntp
     container_name: ntp
     network_mode: "host"
@@ -49,7 +49,7 @@ services:
       - "123:123"
       - "323:323"
     volumes:
-      - ./alpine-infra/chrony.conf:/etc/chrony/chrony.conf
+      - ./ntp/chrony.conf:/etc/chrony/chrony.conf
       - /var/log/chrony:/var/log/chrony
     privileged: true
     # command: "/sbin/init"

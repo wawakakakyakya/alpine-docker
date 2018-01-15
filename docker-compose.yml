@@ -39,6 +39,12 @@ services:
       - "67:67/udp"
     volumes:
       - ./dhcp/dhcpd.conf:/etc/dhcp/dhcpd.conf
+  tftp:
+    build: ./tftp
+    image: tftp
+    container_name: tftp
+    ports:
+      - "69:69/udp"
   ntp:
     build: ./ntp
     image: ntp

@@ -39,6 +39,7 @@ services:
       - "67:67/udp"
     volumes:
       - ./dhcp/dhcpd.conf:/etc/dhcp/dhcpd.conf
+      - ./dhcp/pxeboot/:/tftpboot/pxeboot/
   tftp:
     build: ./tftp
     image: tftp
@@ -49,11 +50,10 @@ services:
     build: ./ntp
     image: ntp
     container_name: ntp
-    network_mode: "host"
     restart: always
     ports:
-      - "123:123"
-      - "323:323"
+      - "123:123/udp"
+      - "323:323/udp"
     volumes:
       - ./ntp/chrony.conf:/etc/chrony/chrony.conf
       - /var/log/chrony:/var/log/chrony

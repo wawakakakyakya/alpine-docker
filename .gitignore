@@ -1,2 +1,4 @@
 */*.cnf
 */*.conf
+./dhcp/pxelinux.0
+./dhcp/pxeboot/pxelinux.cfg/*

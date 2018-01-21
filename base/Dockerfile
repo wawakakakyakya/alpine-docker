@@ -4,7 +4,8 @@ MAINTAINER wawakakakyakya
 USER root
 
 # add repositories
-RUN echo -e "http://dl-4.alpinelinux.org/alpine/v3.5/community\nhttp://dl-4.alpinelinux.org/alpine/edge/testing" >> /etc/apk/repositories
+RUN echo -e "http://dl-4.alpinelinux.org/alpine/v3.5/community"  >> /etc/apk/repositories \
+    && echo -e "http://dl-4.alpinelinux.org/alpine/edge/testing" >> /etc/apk/repositories
 # echo "http://alpine.gliderlabs.com/alpine/edge/main"
 
 # update package
@@ -35,10 +36,6 @@ RUN sed -i 's/#rc_sys=""/rc_sys="lxc"/g' /etc/rc.conf \
     && sed -i 's/cgroup_add_service /# cgroup_add_service /g' /lib/rc/sh/openrc-run.sh \
     && rc-status \
     && touch /run/openrc/softlevel
-
-# change login shell
-# Todo: It does not work
-# RUN sed -e 's/ash/bash/' /etc/passwd
 
 # change TimeZone JST
 RUN cp /usr/share/zoneinfo/Asia/Tokyo /etc/localtime \
